@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+
+    <title>map</title>
+
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.js"></script>
+    <script type="text/javascript" src="{{url_for('static',filename='js/china.js')}}" charset="utf-8"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.js"></script>
+</head>
+<body style="background-color:#363636">
+
+<div id="main" style="positon:absolute;top:10px;left:240px; width: 800px;height:600px;"></div>
+<script type="text/javascript">
+	$.get("{{url_for('getdata')}}").done(function(data){
+	var mydata = $.parseJSON(data);
+	var optionMap = {
+                title: {
+                    text: '全国人口普查大数据',
+                    textStyle:{
+        //文字颜色
+        color:'white',
+        //字体风格,'normal','italic','oblique'
+        fontStyle:'normal',
+        //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+        fontWeight:'bold',
+        //字体系列
+        fontFamily:'sans-serif',
+        //字体大小
+　　　　 fontSize:25
+    },
+                    subtext: '',
+                    x:'center'
+                },
+                tooltip : {  
+                    trigger: 'item'  
+                },  
+
+
+                visualMap: {
+                    min:5000,
+                    max:30000000,
+                    text:['高', '低'],
+                    textStyle:{color:'white'},
+                    show : true,
+                    x: 'left',
+                    y: 'center',
+					color:['#8B0000','#EEE0E5'],
+					calculable: false
+                },
+
+                
+                //配置属性
+                series: [{  
+                    name: '数据',  
+                    type: 'map',  
+                    mapType: 'china',   
+                    roam: true,  
+                    label: {  
+                        normal: {
+                            color: 'white',
+                            show: false
+                        },  
+                        emphasis: {  
+                            show: false  
+                        }  
+                    },  
+                    data: mydata  //数据
+                }]  
+
+            };
+          //初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        //使用制定的配置项和数据显示图表
+        myChart.setOption(optionMap);
+        })
+
+    
+</script>
+</body>
+</html>
